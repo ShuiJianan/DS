@@ -44,6 +44,9 @@ void DeletedAA(L l);
 //两个递增顺序的链表 合并成一个递减顺序的链表
 L LinkADD(L l1,L l2);
 
+//寻找两个链表的交集
+L FindSame(L l1,L l2);
+
 int main(){
     L one=(L)malloc(sizeof(LNode));
     one->data=1;
@@ -334,3 +337,152 @@ L LinkADD(L l1,L l2)
     free(l2);
     return l1;
 }
+
+L FindSame(L l1,L l2)
+{
+    L p;
+    while(l1->data!=l2->data)
+    {
+        if(l1->data<l2->data)
+        {
+            p=l1;
+            l1=l1->Next;
+            free(p);
+        }
+        else
+        {
+            p=l2;
+            l2=l2->Next;
+            free(p);
+        }
+    }
+    L head=l1,pre=l1;
+    l1=l1->Next;
+    l2=l2->Next;
+    while(l1->data==l2->data)
+    {
+        l1=l1->Next;
+        pre=pre->Next;
+        p=l2;
+        l2=l2->Next;
+        free(p);
+    }
+    pre->Next=NULL;
+    while(l1)
+    {
+        p=l1;
+        l1=l1->Next;
+        free(p);
+    }
+    while (l2)
+    {
+        p=l2;
+        l2=l2->Next;
+        free(p);
+    }
+    return l1;
+}
+
+//2009 408真题
+//找带头结点的倒数k个的值
+int FindK(L l,int k)
+{
+    l=l->Next;
+    L work=l;
+    while(l->Next)
+    {
+        while(k--)
+        {
+            l=l->Next;
+        }
+        l=l->Next;
+        work=work->Next;
+    }
+    return work->data;
+}
+
+//2012  408真题
+//找公共结点 
+void FindSameA(L l1,L l2)
+{
+    L p;
+    int length1,length2;
+    p=l1->Next;
+    while(p)
+    {
+        length1++;
+    }
+    p=l2->Next;
+    while(p)
+    {
+        length2++;
+    }
+    if(length1<length2)
+    {
+        while(length2-length1--)
+        {
+            l2=l2->Next;
+        }
+    }
+    else
+    {
+        while(length1-length2)
+        {
+            l1=l1->Next;
+        }
+    }
+    while(l1->data!=l2->data)
+    {
+        l1=l1->Next;
+        l2=l2->Next;
+    }
+    return ;
+}
+
+int Abs(int n)
+{
+    if(n<0)
+    {
+        return -n;
+    }
+    else
+    {
+        return n;
+    }
+}
+
+
+//2015 408真题
+//在单链表中保留第一次出现的数 删除与其绝对值相等的结点
+void SaveFrist(L l,int m)
+{
+    L head=l->Next;
+    int list[m];
+    l=l->Next;
+    int index=1;
+    while(l)
+    {
+        int key=0;
+        for(int i=0;i<index;i++)
+        {
+            if(Abs(list[i])==Abs(l->data))
+            {
+                key=1;
+            }
+        }
+        if(key!=1)
+        {
+            list[index-1]=l->data;
+        }
+        l=l->Next;
+    }
+    int a=0;
+    while(l--)
+    {
+        head->data=list[a++];
+        head=head->Next;
+    }
+    head->Next=NULL;
+    
+}
+
